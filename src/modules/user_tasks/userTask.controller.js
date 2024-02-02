@@ -33,6 +33,34 @@ export class UserParentController {
     }
   }
 
+  async getByTaskId(req, res) {
+    try {
+      const Id = req.params.id;
+
+      const resData = await this.#userTaskService.getByTaskId(Id);
+
+      res.status(resData.statusCode).json(resData);
+    } catch (error) {
+      const resData = new ResData(error.message, error.statusCode, null, error);
+
+      res.status(resData.statusCode || 500).json(resData);
+    }
+  }
+
+  async getByUserId(req, res) {
+    try {
+      const Id = req.params.id;
+
+      const resData = await this.#userTaskService.getByUserId(Id);
+
+      res.status(resData.statusCode).json(resData);
+    } catch (error) {
+      const resData = new ResData(error.message, error.statusCode, null, error);
+
+      res.status(resData.statusCode || 500).json(resData);
+    }
+  }
+
   async create(req, res) {
     try {
       const dto = req.body;

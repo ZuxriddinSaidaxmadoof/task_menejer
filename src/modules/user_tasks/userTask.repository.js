@@ -7,6 +7,13 @@ export class UserParentRepository extends Postgres {
   async getById(id) {
     return await this.fetch("select * from user_tasks where id = $1", id);
   }
+  
+  async getByTaskId(taskId) {
+    return await this.fetchAll("select * from user_tasks where task_id = $1;", taskId);
+  }
+  async getByUserId(userId) {
+    return await this.fetchAll("select * from user_tasks where user_id = $1;", userId);
+  }
   async create(dto) {
     return await this.fetch(
       "INSERT INTO user_tasks(user_id, task_id, start_at, end_at, started_date, ended_date, status, day) VALUES($1, $2, $3,$4,$5,$6,$7,$8) RETURNING *",

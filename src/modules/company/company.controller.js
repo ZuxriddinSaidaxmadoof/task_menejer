@@ -56,10 +56,8 @@ export class CompanyController {
 
   async update(req, res) {
     try {
-      const Id = Number(req.params?.id);
+      const Id = req.params?.id;
       const dto = req.body;
-
-      const data = { name: dto.name, is_public: dto.isPublic, id: Id };
 
       const validated = CompanySchema.validate(dto);
 
@@ -67,7 +65,7 @@ export class CompanyController {
         throw new CompanyException(validated.error.message);
       }
 
-      const resData = await this.#companyService.update(data);
+      const resData = await this.#companyService.update(dto, Id);
 
       res.status(resData.statusCode).json(resData);
     } catch (error) {

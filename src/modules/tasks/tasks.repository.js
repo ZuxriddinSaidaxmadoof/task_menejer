@@ -20,7 +20,6 @@ export class TaskRepository extends Postgres {
     );
   }
 
-
   async update(dto, taskId) {
     return await this.fetch(
       "UPDATE tasks SET title = $1, description = $2, company_id = $3, parent_id = $4, day = $5 WHERE id = $6 RETURNING *",

@@ -15,6 +15,14 @@ router.get("/:id", (req, res) => {
   userParentController.getById(req, res);
 });
 
+router.get("/task/:id", (req, res) => {
+  userParentController.getByTaskId(req, res);
+});
+
+router.get("/user/:id", (req, res) => {
+  userParentController.getByUserId(req, res);
+});
+
 router.post("/", (req, res) => {
   userParentController.create(req, res);
 

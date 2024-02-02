@@ -7,17 +7,20 @@ export class CompanyRepository extends Postgres {
   async getOneById(id) {
     return await this.fetch("select * from companies where id = $1", id);
   }
+  async getOneByName(name) {
+    return await this.fetch("select * from companies where name = $1", name);
+  }
   async create(dto) {
     return await this.fetch(
       "INSERT INTO companies(name) VALUES ($1) RETURNING * ;",
       dto.name
     );
   }
-  async update(dto) {
+  async update(dto, id) {
     return await this.fetch(
       "UPDATE companies SET name = $1 WHERE id = $2 RETURNING *",
       dto.name,
-      dto.id
+      id
     );
   }
   async delete(id) {

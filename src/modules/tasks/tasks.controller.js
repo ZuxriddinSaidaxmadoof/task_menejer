@@ -34,6 +34,7 @@ export class GroupController {
     }
   }
 
+
   async create(req, res) {
     try {
       const dto = req.body;

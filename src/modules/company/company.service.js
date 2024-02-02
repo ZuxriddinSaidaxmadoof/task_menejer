@@ -31,6 +31,10 @@ export class CompanyService {
 
   async create(dto) {
     const newBrand = new CompanyEntity(dto);
+    const checkName = await this.#repository.getOneByName(newBrand.name);
+    if(checkName){
+      throw new CompanyException(`This name '${newBrand.name}' already exist`)
+    } 
 
     const Brands = await this.#repository.create(newBrand);
 
@@ -39,9 +43,17 @@ export class CompanyService {
     return resData;
   }
 
-  async update(dto) {
+  async update(dto, id) {
+    const checkCompanyExist = await this.#repository.getOneById(id);
+    if(!checkCompanyExist){
+      throw new CompanyNotFoundException();
+    }
 
-    const updateBrand = await this.#repository.update(dto)
+    const checkName = await this.#repository.getOneByName(dto.name);
+    if(checkName){
+      throw new CompanyException(`This name '${dto.name}' already exist`)
+    } 
+    const updateBrand = await this.#repository.update(dto, id)
 
     const resData = new ResData("updated by id", 200, updateBrand);
 

@@ -61,6 +61,93 @@ CREATE TABLE audit_users(
     login VARCHAR UNIQUE NOT NULL,
     full_name VARCHAR (64) DEFAULT NULL,
     company_id int DEFAULT NULL,
-    role role_type DEFAULT 'user'
+    role role_type DEFAULT 'worker'
 );
+
+///////////////// TRIGGERS FOR COMPANY //////////////////////////
+
+// INSERT TRIGGER FOR COMPANIES
+
+CREATE FUNCTION fr_insert_company() 
+   RETURNS TRIGGER 
+   LANGUAGE PLPGSQL
+AS $$
+BEGIN
+    INSERT INTO audit_companies(id, name, status)
+    VALUES (new.id, new.name, 'insert');
+    return new;
+END
+$$;
+
+CREATE TRIGGER insert_trigger
+
+   AFTER INSERT
+   ON companies
+   FOR EACH ROW 
+EXECUTE PROCEDURE fr_insert_company();
+
+
+// UPDATE TRIGGER FOR COMPANIES
+
+CREATE FUNCTION fr_update_company() 
+   RETURNS TRIGGER 
+   LANGUAGE PLPGSQL
+AS $$
+BEGIN
+    INSERT INTO audit_companies(id, name, status)
+    VALUES (new.id, new.name, 'update');
+    return new;
+END
+$$;
+
+CREATE TRIGGER update_trigger
+
+   AFTER UPDATE
+   ON companies
+   FOR EACH ROW 
+EXECUTE PROCEDURE fr_update_company();
+
+
+// DELETE TRIGGER FOR COMPANIES
+
+CREATE FUNCTION fr_delete_company() 
+   RETURNS TRIGGER 
+   LANGUAGE PLPGSQL
+AS $$
+BEGIN
+    INSERT INTO audit_companies(id, name, status)
+    VALUES (old.id, old.name, 'delete');
+    return old;
+END
+$$;
+
+CREATE TRIGGER delete_trigger
+
+   AFTER DELETE
+   ON companies
+   FOR EACH ROW 
+EXECUTE PROCEDURE fr_delete_company();
+
+
+///////////////////////TRIGGER FOR USER/////////////////////////
+
+// DELETE TRIGGER FOR USERS
+
+CREATE FUNCTION fr_delete_user() 
+   RETURNS TRIGGER 
+   LANGUAGE PLPGSQL
+AS $$
+BEGIN
+    INSERT INTO audit_users(id, login, full_name, company_id, role )
+    VALUES (old.id, old.login, old.full_name, old.company_id, old.role);
+    return old;
+END
+$$;
+
+CREATE TRIGGER delete_trigger
+
+   AFTER DELETE
+   ON users
+   FOR EACH ROW 
+EXECUTE PROCEDURE fr_delete_user();
 

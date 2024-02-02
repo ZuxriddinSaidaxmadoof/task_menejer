@@ -35,6 +35,41 @@ export class UserParentService {
     return resData;
   }
 
+  async getByTaskId(id) {
+    const foundTask = await this.#taskRepository.getById(id);
+    if(!foundTask){
+      throw new UserTaskException("Task not found");
+    }
+
+    const tasks = await this.#repository.getByTaskId(id);
+
+    if (!tasks.length) {
+      throw new UserTaskException("This task is not given to anyone");
+    }
+
+    const resData = new ResData("Get by task id", 200, tasks);
+
+    return resData;
+  }
+
+  async getByUserId(id) {
+    const foundUser = await this.#repository.getById(id);
+    console.log("found user", foundUser);
+    if (!foundUser) {
+      throw new UserTaskException("user not found");
+    }
+
+    const tasks = await this.#repository.getByUserId(id);
+    if (!tasks.length) {
+      throw new UserTaskException("this user has not got any tasks");
+    }
+    console.log("Tasks", tasks);
+
+    const resData = new ResData("Get by user id", 200, tasks);
+
+    return resData;
+  }
+
   async create(dto) {
     const newUserTask = new UserTaskEntity(dto);
 
