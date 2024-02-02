@@ -26,6 +26,19 @@ export class UserController {
     }
   }
 
+  async getByCompanyId(req, res) {
+    try {
+      const companyId = req.params.id;
+      const resData = await this.#userService.getByCompanyId(companyId);
+
+      res.status(resData.statusCode).json(resData);
+    } catch (error) {
+      const resData = new ResData(error.message, error.statusCode, null, error);
+
+      res.status(resData.statusCode || 500).json(resData);
+    }
+  }
+
   async getById(req, res) {
     try {
       const Id = req.params.id;

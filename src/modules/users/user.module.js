@@ -15,6 +15,10 @@ router.get("/:id", (req, res) => {
   userController.getById(req, res);
 });
 
+router.get("/company/:id", (req, res) => {
+  userController.getByCompanyId(req, res);
+});
+
 router.post("/", (req, res) => {
   userController.register(req, res);
 });

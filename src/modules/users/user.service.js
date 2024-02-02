@@ -6,14 +6,17 @@ import {
   UserLoginAlreadyExistException
 } from "./exception/user.exception.js";
 import { UserRepository } from "./user.repository.js";
+import { CompanyRepository } from "../company/company.repository.js";
 import { UserEntity } from "./entity/user.entity.js";
 import { hashed, compare } from "./../../lib/bcript.js";
 import { generateToken, verifyToken } from "../../lib/jwt.js";
 
 export class UserService {
   #repository;
+  #companyRepository;
   constructor() {
     this.#repository = new UserRepository();
+    this.#companyRepository = new CompanyRepository();
   }
 
   async getAll() {
@@ -32,6 +35,23 @@ export class UserService {
     }
 
     const resData = new ResData("get by id users", 200, userId);
+
+    return resData;
+  }
+
+  async getByCompanyId(companyId) {
+    const foundCompany = await this.#companyRepository.getOneById(companyId);
+    if(!foundCompany){
+      throw new UserBadRequestException("Company not found")
+    }
+
+    const userId = await this.#repository.getByCompanyId(companyId);
+console.log();
+    if (!userId.length) {
+      throw new UserBadRequestException("This company has not any users");
+    }
+
+    const resData = new ResData("get by company id", 200, userId);
 
     return resData;
   }
@@ -56,7 +76,6 @@ export class UserService {
     dto.password = hashedPassword;
 
     const newUser = new UserEntity(dto);
-console.log(newUser);
     const createdUser = await this.#repository.create(newUser);
 
     if (!createdUser) {

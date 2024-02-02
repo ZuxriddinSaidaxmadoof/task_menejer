@@ -37,6 +37,6 @@ export class UserParentRepository extends Postgres {
   }
 
   async delete(id) {
-    return await this.fetch("DELETE FROM user_tasks WHERE id = $1;", id);
+    return await this.fetch("DELETE FROM user_tasks WHERE id = $1 RETURNING *;", id);
   }
 }

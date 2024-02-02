@@ -65,7 +65,7 @@ console.log(error);
         throw new UserTaskException(userTaskValidated.error.message)
       }
 
-      const resData = await this.#userTaskService.update(data, Id);
+      const resData = await this.#userTaskService.update(dto, Id);
 
       return res.status(resData.statusCode).json(resData);
     } catch (error) {

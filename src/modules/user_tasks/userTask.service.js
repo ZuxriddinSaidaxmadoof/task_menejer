@@ -58,30 +58,42 @@ export class UserParentService {
   }
 
   async update(dto, userTaskId) {
-    const userTask = await this.#repository.getById(userTaskId);
+    const newUserTask = new UserTaskEntity(dto);
 
+    const userTask = await this.#repository.getById(userTaskId);
     if (!userTask) {
       throw new UserTaskNotFoundException();
     }
 
-    const updatedUserParent = await this.#repository.update(dto)
+    const foundUser = await this.#userRepository.getById(newUserTask.user_id);
+    if(!foundUser){
+      throw new UserTaskException("user not found");
+    }
 
-    const resData = new ResData("user task successfully updated", 200, updatedUserParent);
+    const foundTask = await this.#taskRepository.getById(newUserTask.task_id);
+    if(!foundTask){
+      throw new UserTaskException("task not found");
+    }
+
+    const updatedUserTask = await this.#repository.update(newUserTask, userTaskId)
+    console.log("updated", updatedUserTask);
+
+    const resData = new ResData("user task successfully updated", 200, updatedUserTask);
 
     return resData;
   }
 
   async delete(id) {
 
-    const UserParentId = await this.#repository.getById(id);
+    const userTaskId = await this.#repository.getById(id);
 
-    if (!UserParentId) {
-      throw new UserTaskNotFoundException( UserTaskException);
+    if (!userTaskId) {
+      throw new UserTaskNotFoundException();
     }
 
     const deletedUserParent = await this.#repository.delete(id);
 
-    const resData =  new ResData("user task successfully deleted", 200, UserParentId);
+    const resData =  new ResData("user task successfully deleted", 200, deletedUserParent);
 
     return resData;
   }
