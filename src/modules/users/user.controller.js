@@ -64,7 +64,7 @@ export class UserController {
         throw new UserLoginAlreadyExistException();
       }
 
-      const resData = await this.#userService.create(dto);
+      const resData = await this.#userService.create(dto, res);
 
       res.status(resData.statusCode).json(resData);
     } catch (error) {
@@ -74,6 +74,29 @@ export class UserController {
       res.status(resData.statusCode || 500).json(resData);
     }
   }
+
+  // async loginUser(req, res) {
+  //   try {
+  //     const dto = req.body;
+
+  //     validationSchema(userRegisterSchema, dto);
+
+  //     const resDataGetByLogin = await this.#userService.getByLogin(dto.login);
+
+  //     if (resDataGetByLogin.data) {
+  //       throw new UserLoginAlreadyExistException();
+  //     }
+
+  //     const resData = await this.#userService.create(dto);
+
+  //     res.status(resData.statusCode).json(resData);
+  //   } catch (error) {
+  //     console.log(error);
+  //     const resData = new ResData(error.message, error.statusCode, null, error);
+
+  //     res.status(resData.statusCode || 500).json(resData);
+  //   }
+  // }
 
   async update(req, res) {
     try {

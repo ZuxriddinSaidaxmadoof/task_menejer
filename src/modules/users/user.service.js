@@ -46,7 +46,6 @@ export class UserService {
     }
 
     const userId = await this.#repository.getByCompanyId(companyId);
-console.log();
     if (!userId.length) {
       throw new UserBadRequestException("This company has not any users");
     }
@@ -70,7 +69,7 @@ console.log();
     return resData;
   }
 
-  async create(dto) {
+  async create(dto, res) {
     const hashedPassword = await hashed(dto.password);
 
     dto.password = hashedPassword;
@@ -83,7 +82,7 @@ console.log();
     }
 
     const token = generateToken(createdUser.id);
-
+    res.setHeader('token', generateToken(dto.id))
     const resData = new ResData("successfully created", 201, {
       user: createdUser,
       token,

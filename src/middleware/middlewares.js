@@ -1,7 +1,7 @@
 import { roles } from "../common/enums/roles.js";
 import { ResData } from "../common/resData.js";
 import { verifyToken } from "../lib/jwt.js";
-import { UserService } from "../modules/user/user.service.js";
+// import { UserService } from "../modules/user/user.service.js";
 import {
   AuthorizationTokenRequiredException,
   AuthorizationUserIdRequiredException,
@@ -22,7 +22,7 @@ export class AuthorizationMiddleware {
       if (!userId) {
         throw new AuthorizationUserIdRequiredException();
       }
-
+console.log("userId: ", userId);
       req.userId = userId;
 
       return next();

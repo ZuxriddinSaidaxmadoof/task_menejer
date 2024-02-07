@@ -128,7 +128,6 @@ CREATE TRIGGER delete_trigger
    FOR EACH ROW 
 EXECUTE PROCEDURE fr_delete_company();
 
-
 ///////////////////////TRIGGER FOR USER/////////////////////////
 
 // DELETE TRIGGER FOR USERS
